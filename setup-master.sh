@@ -20,7 +20,7 @@ repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg' >/etc/yum.repos.d/kubernetes.repo
 
 yum install -y kubelet kubeadm kubectl &>>$LOG
-Stat "Installing Kubelet Service"
+Stat $? "Installing Kubelet Service"
 
 sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
@@ -28,5 +28,5 @@ sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/ku
 systemctl enable kubelet  &>/dev/null
 systemctl daemon-reload &>/dev/null
 systemctl start kubelet &>>$LOG 
-Stat "Starting Kubelet Service"
+Stat $? "Starting Kubelet Service"
 
