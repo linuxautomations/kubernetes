@@ -71,4 +71,5 @@ systemctl daemon-reload &>/dev/null
 systemctl restart kubelet &>>$LOG 
 Stat $? "Retarting Kubelet Service"
 
-kubeadm init
+sysctl net.bridge.bridge-nf-call-iptables=1
+kubeadm init --pod-network-cidr=10.244.0.0/16
