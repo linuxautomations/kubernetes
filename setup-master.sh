@@ -42,7 +42,7 @@ fi
 
 #yum install docker -y &>>$LOG
 #systemctl enable docker &>>$LOG
-#systemctl start docker 
+#systemctl start docker  
 
 echo '[kubernetes]
 name=Kubernetes
@@ -65,9 +65,9 @@ net.bridge.bridge-nf-call-iptables = 1' > /etc/sysctl.d/k8s.conf
 sysctl --system &>> $LOG
 Stat $? "Updating Network Configuration" 
 
-sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroup/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 systemctl daemon-reload &>/dev/null
 systemctl restart kubelet &>>$LOG 
 Stat $? "Retarting Kubelet Service"
 
-kubelet init
+#kubelet init
