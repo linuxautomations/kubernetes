@@ -23,7 +23,7 @@ DockerCERepo
 
 ## Installing Docker
 yum install bind-utils docker-ce http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.21-1.el7.noarch.rpm -y &>/dev/null
-yum install docker -y
+#yum install docker -y
 if [ $? -eq 0 ]; then  
 	success "Installed Docker-CE Successfully"
 else
