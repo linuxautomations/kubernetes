@@ -71,4 +71,4 @@ systemctl daemon-reload &>/dev/null
 systemctl restart kubelet &>>$LOG 
 Stat $? "Retarting Kubelet Service"
 
-kubelet init
+kubeadm init
