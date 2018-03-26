@@ -18,9 +18,31 @@ CheckSELinux
 ## Checking Firewall on the Server.
 CheckFirewall
 
-yum install docker -y &>>$LOG
-systemctl enable docker &>>$LOG
-systemctl start docker 
+## Setting Up Docker Repository.
+DockerCERepo
+
+## Installing Docker
+yum install bind-utils docker-ce http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.21-1.el7.noarch.rpm -y &>/dev/null
+if [ $? -eq 0 ]; then  
+	success "Installed Docker-CE Successfully"
+else
+	error "Installing Docker-CE Failure"
+	exit 1
+fi
+
+## Starting Docker Service
+systemctl enable docker &>/dev/null
+systemctl start docker &>/dev/null
+if [ $? -eq 0 ]; then 
+	success "Started Docker Engine Successfully"
+else
+	error "Starting Docker Engine Failed"
+	exit 1
+fi
+
+#yum install docker -y &>>$LOG
+#systemctl enable docker &>>$LOG
+#systemctl start docker 
 
 echo '[kubernetes]
 name=Kubernetes
