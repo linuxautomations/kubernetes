@@ -47,3 +47,5 @@ sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/ku
 systemctl daemon-reload &>/dev/null
 systemctl restart kubelet &>>$LOG 
 Stat $? "Retarting Kubelet Service"
+
+kubelet init
