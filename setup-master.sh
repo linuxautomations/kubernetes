@@ -9,9 +9,17 @@ rm -f $LOG
 curl -s "https://raw.githubusercontent.com/linuxautomations/scripts/master/common-functions.sh" >/tmp/common-functions.sh
 source /tmp/common-functions.sh
 
-#curl -s https://raw.githubusercontent.com/linuxautomations/docker/master/install-ce.sh | bash 
-yum install docker -y 
-systemctl enable docker
+## Checking Root User or not.
+CheckRoot
+
+## Checking SELINUX Enabled or not.
+CheckSELinux
+
+## Checking Firewall on the Server.
+CheckFirewall
+
+yum install docker -y &>>$LOG
+systemctl enable docker &>>$LOG
 systemctl start docker 
 
 echo '[kubernetes]
@@ -29,8 +37,6 @@ systemctl enable kubelet  &>/dev/null
 
 systemctl start kubelet &>>$LOG 
 Stat $? "Starting Kubelet Service"
-
-exit
 
 echo 'net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1' > /etc/sysctl.d/k8s.conf
