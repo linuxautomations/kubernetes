@@ -19,10 +19,10 @@ CheckSELinux
 CheckFirewall
 
 ## Setting Up Docker Repository.
-#DockerCERepo
+DockerCERepo
 
 ## Installing Docker
-#yum install bind-utils docker-ce http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.21-1.el7.noarch.rpm -y &>/dev/null
+yum install bind-utils docker-ce http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.21-1.el7.noarch.rpm -y &>/dev/null
 yum install docker -y
 if [ $? -eq 0 ]; then  
 	success "Installed Docker-CE Successfully"
@@ -58,17 +58,17 @@ Stat $? "Installing Kubelet Service"
 
 systemctl enable kubelet  &>/dev/null
 
-systemctl start kubelet &>>$LOG 
-Stat $? "Starting Kubelet Service"
+#systemctl start kubelet &>>$LOG 
+#Stat $? "Starting Kubelet Service"
 
 echo 'net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1' > /etc/sysctl.d/k8s.conf
 sysctl --system &>> $LOG
 Stat $? "Updating Network Configuration" 
 
-sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroup/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 systemctl daemon-reload &>/dev/null
 systemctl restart kubelet &>>$LOG 
 Stat $? "Retarting Kubelet Service"
 
-#kubelet init
+kubelet init
