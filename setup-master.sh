@@ -71,5 +71,26 @@ systemctl daemon-reload &>/dev/null
 systemctl restart kubelet &>>$LOG 
 Stat $? "Retarting Kubelet Service"
 
-sysctl net.bridge.bridge-nf-call-iptables=1
-kubeadm init --pod-network-cidr=10.244.0.0/16
+sysctl net.bridge.bridge-nf-call-iptables=1 &>/dev/null 
+kubeadm init --pod-network-cidr=10.244.0.0/16 &>$LOG 
+STAT=$?
+Stat $? "Initializing Repository"
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml &>/dev/null 
+Stat $? "Setting Up Flanneld Network"
+i=120
+while true ; do 
+    kubectl get pods  --all-namespaces | grep kube-system | awk '{print $4}' | grep -v Running &>/dev/null 
+    if [ $? -ne 0 ]; then 
+        Stat 0 "Network Configuration Completed"
+    else 
+        i=$(($i-1))
+        if [ $i -lt 0 ]; then 
+            Stat 1 "Network Configuration Failed"
+        fi 
+        continue
+    fi
+done
+hint "Join the nodes using the following command"
+cat $LOG | /bin/grep join
+
