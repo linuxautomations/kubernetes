@@ -74,7 +74,12 @@ Stat $? "Retarting Kubelet Service"
 sysctl net.bridge.bridge-nf-call-iptables=1 &>/dev/null 
 kubeadm init --pod-network-cidr=10.244.0.0/16 &>$LOG 
 STAT=$?
-Stat $? "Initializing Repository"
+Stat $? "Initializing Kubernetes Cluster"
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml &>/dev/null 
 Stat $? "Setting Up Flanneld Network"
