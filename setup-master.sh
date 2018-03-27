@@ -83,11 +83,13 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml &>/dev/null 
 Stat $? "Setting Up Flanneld Network"
+sleep 30
 i=120
 while true ; do 
     kubectl get pods  --all-namespaces | grep kube-system | awk '{print $4}' | grep -v Running &>/dev/null 
     if [ $? -ne 0 ]; then 
         Stat 0 "Network Configuration Completed"
+        break
     else 
         i=$(($i-1))
         if [ $i -lt 0 ]; then 
