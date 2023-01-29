@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Kubernetes Node Setup
-echo "hi"
+echo "hi vivek"
 LOG=/tmp/kube-master.log 
 rm -f $LOG
 
